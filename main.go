@@ -1,23 +1,12 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
 
-type User struct {
-	Name      string
-	BirthDate string
-}
-
-type UserRepo interface {
-	Create() int16
-}
-
-func (u User) Create() int16 {
-	fmt.Printf("creating user %s with birthDate: %s\n", u.Name, u.BirthDate)
-	return 201
-}
+	"github.com/gustavovalle23/user-microservice-golang/entities"
+)
 
 func main() {
-	user := User{Name: "Gusta", BirthDate: "1999-01-01"}
-	status := user.Create()
-	fmt.Printf("Status: %d", status)
+	user := entities.UserFactory("User 1", "1999-01-01", 0)
+	fmt.Printf("User %s with %d points\n", user.GetName(), user.GetPoins())
 }
