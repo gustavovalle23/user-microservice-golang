@@ -40,10 +40,6 @@ func NewDate(year int, month time.Month, day int) Date {
 	}
 }
 
-func (d Date) Time() time.Time {
-	return time.Date(d.Year, d.Month, d.Day, 0, 0, 0, 0, time.UTC)
-}
-
 func (u *User) IsDeleted() bool {
 	return u.DeletedAt != nil && !u.DeletedAt.IsZero()
 }
@@ -54,5 +50,12 @@ func (u *User) EncryptPassword() error {
 		return err
 	}
 	u.Password = string(hashedPassword)
+	return nil
+}
+
+func (u *User) ComparePassword(password string) error {
+	if err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password)); err != nil {
+		return err
+	}
 	return nil
 }
