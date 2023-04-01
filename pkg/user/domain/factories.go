@@ -7,6 +7,8 @@ import (
 )
 
 func NewUser(name, password, email, documentNo string, address Address, birthDate Date) (*User, error) {
+	creationDate := time.Now().UTC()
+
 	user := &User{
 		ID:         primitive.NewObjectID(),
 		Name:       name,
@@ -15,7 +17,8 @@ func NewUser(name, password, email, documentNo string, address Address, birthDat
 		DocumentNo: documentNo,
 		Address:    address,
 		BirthDate:  birthDate,
-		CreatedAt:  time.Now().UTC(),
+		CreatedAt:  creationDate,
+		UpdatedAt:  creationDate,
 	}
 
 	if err := user.EncryptPassword(); err != nil {

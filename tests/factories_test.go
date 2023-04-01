@@ -40,6 +40,7 @@ func TestNewUser(t *testing.T) {
 		assert.WithinDuration(t, time.Now().UTC(), user.CreatedAt, time.Second)
 		assert.True(t, user.CreatedAt.Before(time.Now().UTC()))
 		assert.True(t, user.UpdatedAt.Before(time.Now().UTC()))
+		assert.WithinDuration(t, time.Now().UTC(), user.UpdatedAt, time.Second)
 		assert.Nil(t, user.DeletedAt)
 	})
 
