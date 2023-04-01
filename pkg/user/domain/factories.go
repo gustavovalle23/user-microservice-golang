@@ -1,5 +1,26 @@
 package domain
 
-func UserFactory(name string, email string, password string) User {
-	return User{name: name, email: email, password: password, active: true, points: 0}
+import (
+	"time"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
+)
+
+func NewUser(name, password, email, documentNo string, address Address, birthDate Date) (*User, error) {
+	user := &User{
+		ID:         primitive.NewObjectID(),
+		Name:       name,
+		Password:   password,
+		Email:      email,
+		DocumentNo: documentNo,
+		Address:    address,
+		BirthDate:  birthDate,
+		CreatedAt:  time.Now().UTC(),
+	}
+
+	if err := user.EncryptPassword(); err != nil {
+		return nil, err
+	}
+
+	return user, nil
 }
