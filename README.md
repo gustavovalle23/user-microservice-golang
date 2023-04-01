@@ -2,7 +2,7 @@
 > This is a microservice that represents the users of the application
 
 ## Features and Technologies
-> This project uses go version go1.19.3 linux/amd64
+> This project uses go version go1.20.1 linux/amd64
 
 - [ ] Create user
 - [ ] Read/Find all users registered
