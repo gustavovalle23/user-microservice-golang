@@ -1,9 +1,8 @@
-package usecase
+package usecases
 
 import (
 	"errors"
 
-	"github.com/gustavovalle23/user-microservice-golang/pkg/user/database"
 	"github.com/gustavovalle23/user-microservice-golang/pkg/user/domain"
 )
 
@@ -21,10 +20,10 @@ type CreateUserOutput struct {
 }
 
 type CreateUserUseCase struct {
-	userRepo database.UserRepository
+	userRepo domain.UserRepository
 }
 
-func NewCreateUserUseCase(userRepo database.UserRepository) *CreateUserUseCase {
+func NewCreateUserUseCase(userRepo domain.UserRepository) *CreateUserUseCase {
 	return &CreateUserUseCase{userRepo: userRepo}
 }
 
