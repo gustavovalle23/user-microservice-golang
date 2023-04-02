@@ -14,16 +14,18 @@ type Address struct {
 }
 
 type User struct {
-	ID         primitive.ObjectID
-	Name       string
-	BirthDate  Date
-	Password   string
-	Email      string
-	DocumentNo string
-	Address    Address
-	CreatedAt  time.Time
-	UpdatedAt  time.Time
-	DeletedAt  *time.Time
+	ID                  primitive.ObjectID
+	Name                string
+	BirthDate           Date
+	Password            string
+	Email               string
+	DocumentNo          string
+	Address             Address
+	CreatedAt           time.Time
+	UpdatedAt           time.Time
+	DeletedAt           *time.Time
+	ResetToken          string
+	ResetTokenExpiresAt time.Time
 }
 
 type Date struct {

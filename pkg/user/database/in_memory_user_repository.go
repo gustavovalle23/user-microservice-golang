@@ -56,6 +56,19 @@ func (r *InMemoryUserRepository) FindByDocumentNo(documentNo string) (*domain.Us
 	return nil, domain.ErrUserNotFound
 }
 
+func (r *InMemoryUserRepository) FindByEmail(email string) (*domain.User, error) {
+	r.mutex.Lock()
+	defer r.mutex.Unlock()
+
+	for _, user := range r.users {
+		if user.Email == email {
+			return user, nil
+		}
+	}
+
+	return nil, domain.ErrUserNotFound
+}
+
 func (r *InMemoryUserRepository) Update(user *domain.User) error {
 	r.mutex.Lock()
 	defer r.mutex.Unlock()
