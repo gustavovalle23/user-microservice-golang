@@ -37,7 +37,7 @@ func (uc *CreateUserUseCase) Execute(input CreateUserInput) (CreateUserOutput, e
 		return CreateUserOutput{}, domain.ErrUserAlreadyExists
 	}
 
-	user, err := domain.NewUser(input.Name, input.Password, input.Email, input.DocumentNo, input.Address, input.BirthDate)
+	user, err := domain.NewUser(nil, input.Name, input.Password, input.Email, input.DocumentNo, input.Address, input.BirthDate)
 	if err != nil {
 		return CreateUserOutput{}, err
 	}
