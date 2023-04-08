@@ -16,8 +16,7 @@ import (
 
 // CreateUser is the resolver for the createUser field.
 func (r *mutationResolver) CreateUser(ctx context.Context, input model.CreateUserInput) (*model.CreateUserOutput, error) {
-
-	createUserUseCase := usecases.NewCreateUserUseCase(r.userRepo)
+	createUserUseCase := usecases.NewCreateUserUseCase(r.UserRepo)
 
 	Month, err := strconv.Atoi(*input.BirthDate.Month)
 
@@ -45,7 +44,6 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input model.CreateUse
 	return &model.CreateUserOutput{
 		UserID: output.UserID,
 	}, nil
-
 }
 
 // RootQuery is the resolver for the rootQuery field.
@@ -54,17 +52,10 @@ func (r *queryResolver) RootQuery(ctx context.Context) (string, error) {
 }
 
 // Mutation returns MutationResolver implementation.
-func (r *Resolver) Mutation(userRepo domain.UserRepository) MutationResolver {
-	return &mutationResolver{userRepo: userRepo}
-}
+func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 
 // Query returns QueryResolver implementation.
 func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
-// type mutationResolver struct{ *Resolver }
-
-type mutationResolver struct {
-	userRepo domain.UserRepository
-}
-
+type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }

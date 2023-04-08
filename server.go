@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"log"
 	"net/http"
 	"os"
@@ -22,14 +21,10 @@ func main() {
 		port = defaultPort
 	}
 
-	client, err := database.NewMongoClient(context.Background(), "mongodb://localhost:27017")
-	if err != nil {
-		log.Fatalf("Failed to create MongoDB client: %v", err)
-	}
-	collection := client.Database("userdb").Collection("users")
+	userRepo := database.NewInMemoryUserRepository()
+	res := graph.NewResolver(userRepo)
 
-	userRepo := database.NewUserRepository(collection)
-	schema := graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{UserRepo: userRepo}})
+	schema := graph.NewExecutableSchema(graph.Config{Resolvers: res})
 
 	srv := handler.NewDefaultServer(schema)
 	srv.AddTransport(transport.Websocket{
