@@ -23,7 +23,7 @@ func TestNewUser(t *testing.T) {
 	birthDate := domain.NewDate(1990, time.January, 1)
 
 	t.Run("success", func(t *testing.T) {
-		user, err := domain.NewUser(name, password, email, documentNo, address, birthDate)
+		user, err := domain.NewUser(nil, name, password, email, documentNo, address, birthDate)
 		assert.NoError(t, err)
 		assert.NotNil(t, user)
 		assert.Equal(t, name, user.Name)

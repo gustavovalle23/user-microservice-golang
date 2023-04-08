@@ -28,6 +28,12 @@ func (m *MockUserRepository) FindByEmail(email string) (*domain.User, error) {
 	return user, args.Error(1)
 }
 
+func (m *MockUserRepository) FindByID(ID string) (*domain.User, error) {
+	args := m.Called(ID)
+	user, _ := args.Get(0).(*domain.User)
+	return user, args.Error(1)
+}
+
 func (m *MockUserRepository) Update(user *domain.User) error {
 	args := m.Called(user)
 	return args.Error(0)

@@ -30,10 +30,16 @@ func (ur *MongoDBUserRepository) Save(user *domain.User) error {
 	return err
 }
 
-func (ur *MongoDBUserRepository) FindById(id primitive.ObjectID) (*domain.User, error) {
+func (ur *MongoDBUserRepository) FindByID(id string) (*domain.User, error) {
 	var user domain.User
 
-	err := ur.collection.FindOne(context.Background(), bson.M{"_id": id}).Decode(&user)
+	search, errID := primitive.ObjectIDFromHex(id)
+
+	if errID != nil {
+		return nil, domain.InvalidID
+	}
+
+	err := ur.collection.FindOne(context.Background(), bson.M{"_id": search}).Decode(&user)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			return nil, domain.ErrUserNotFound
