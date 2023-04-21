@@ -1,45 +1,33 @@
 package main
 
 import (
-	"log"
-	"net/http"
+	"fmt"
 	"os"
+	"strconv"
 
-	"github.com/99designs/gqlgen/graphql/handler"
-	"github.com/99designs/gqlgen/graphql/handler/transport"
-	"github.com/99designs/gqlgen/graphql/playground"
-	"github.com/gorilla/websocket"
-	"github.com/gustavovalle23/user-microservice-golang/graph"
-	"github.com/gustavovalle23/user-microservice-golang/pkg/user/database"
+	"github.com/joho/godotenv"
 )
 
-const defaultPort = "8080"
+const defaultPort = 8080
 
 func main() {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = defaultPort
+	err := godotenv.Load(".env")
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
 	}
 
-	userRepo := database.NewInMemoryUserRepository()
-	res := graph.NewResolver(userRepo)
+	portStr := os.Getenv("PORT")
+	if portStr == "" {
+		portStr = strconv.Itoa(defaultPort)
+	}
 
-	schema := graph.NewExecutableSchema(graph.Config{Resolvers: res})
+	port, err := strconv.Atoi(portStr)
+	if err != nil {
+		fmt.Println("Error: Invalid PORT value")
+		return
+	}
 
-	srv := handler.NewDefaultServer(schema)
-	srv.AddTransport(transport.Websocket{
-		Upgrader: websocket.Upgrader{
-			CheckOrigin: func(r *http.Request) bool {
-				return true
-			},
-			ReadBufferSize:  1024,
-			WriteBufferSize: 1024,
-		},
-	})
+	fmt.Println(port)
 
-	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
-	http.Handle("/query", srv)
-
-	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
-	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
