@@ -60,5 +60,4 @@ func (uc *UpdateUserUseCase) Execute(input UpdateUserInput) (UpdateUserOutput, e
 			BirthDate:  updatedUser.BirthDate,
 		},
 		nil
-
 }
