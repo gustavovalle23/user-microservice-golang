@@ -9,12 +9,12 @@ import (
 
 type InMemoryUserRepository struct {
 	mutex sync.Mutex
-	users map[string]*domain.User
+	users map[int]*domain.User
 }
 
 func NewInMemoryUserRepository() *InMemoryUserRepository {
 	return &InMemoryUserRepository{
-		users: make(map[string]*domain.User),
+		users: make(map[int]*domain.User),
 	}
 }
 
@@ -22,16 +22,16 @@ func (r *InMemoryUserRepository) Save(user *domain.User) error {
 	r.mutex.Lock()
 	defer r.mutex.Unlock()
 
-	if _, ok := r.users[user.ID.Hex()]; ok {
+	if _, ok := r.users[user.ID]; ok {
 		return errors.New("user already exists")
 	}
 
-	r.users[user.ID.Hex()] = user
+	r.users[user.ID] = user
 
 	return nil
 }
 
-func (r *InMemoryUserRepository) FindByID(id string) (*domain.User, error) {
+func (r *InMemoryUserRepository) FindByID(id int) (*domain.User, error) {
 	r.mutex.Lock()
 	defer r.mutex.Unlock()
 
@@ -73,16 +73,16 @@ func (r *InMemoryUserRepository) Update(user *domain.User) error {
 	r.mutex.Lock()
 	defer r.mutex.Unlock()
 
-	if _, ok := r.users[user.ID.Hex()]; !ok {
+	if _, ok := r.users[user.ID]; !ok {
 		return domain.ErrUserNotFound
 	}
 
-	r.users[user.ID.Hex()] = user
+	r.users[user.ID] = user
 
 	return nil
 }
 
-func (r *InMemoryUserRepository) Delete(id string) error {
+func (r *InMemoryUserRepository) Delete(id int) error {
 	r.mutex.Lock()
 	defer r.mutex.Unlock()
 

@@ -35,7 +35,7 @@ func (usecase LoginUseCase) Execute(input LoginInput) (LoginOutput, error) {
 		return LoginOutput{}, errors.New("Invalid password")
 	}
 
-	token, err := usecase.tokenGenerator.GenerateToken(user.ID.Hex(), time.Now().Add(time.Hour*24*7))
+	token, err := usecase.tokenGenerator.GenerateToken(user.ID, time.Now().Add(time.Hour*24*7))
 	if err != nil {
 		return LoginOutput{}, err
 	}

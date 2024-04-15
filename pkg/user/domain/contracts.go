@@ -7,5 +7,5 @@ type Mailer interface {
 }
 
 type TokenGenerator interface {
-	GenerateToken(userID string, expirationTime time.Time) (string, error)
+	GenerateToken(userID int, expirationTime time.Time) (string, error)
 }

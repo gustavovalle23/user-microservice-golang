@@ -3,7 +3,6 @@ package domain
 import (
 	"time"
 
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -14,7 +13,7 @@ type Address struct {
 }
 
 type User struct {
-	ID                  primitive.ObjectID
+	ID                  int
 	Name                string
 	BirthDate           Date
 	Password            string

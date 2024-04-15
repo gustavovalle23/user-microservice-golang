@@ -7,6 +7,7 @@ import (
 )
 
 type CreateUserInput struct {
+	ID         int
 	Name       string
 	Password   string
 	Email      string
@@ -16,7 +17,7 @@ type CreateUserInput struct {
 }
 
 type CreateUserOutput struct {
-	UserID string
+	UserID int
 }
 
 type CreateUserUseCase struct {
@@ -37,7 +38,7 @@ func (uc *CreateUserUseCase) Execute(input CreateUserInput) (CreateUserOutput, e
 		return CreateUserOutput{}, domain.ErrUserAlreadyExists
 	}
 
-	user, err := domain.NewUser(nil, input.Name, input.Password, input.Email, input.DocumentNo, input.Address, input.BirthDate)
+	user, err := domain.NewUser(input.ID, input.Name, input.Password, input.Email, input.DocumentNo, input.Address, input.BirthDate)
 	if err != nil {
 		return CreateUserOutput{}, err
 	}
@@ -47,5 +48,5 @@ func (uc *CreateUserUseCase) Execute(input CreateUserInput) (CreateUserOutput, e
 		return CreateUserOutput{}, err
 	}
 
-	return CreateUserOutput{UserID: user.ID.Hex()}, nil
+	return CreateUserOutput{UserID: user.ID}, nil
 }

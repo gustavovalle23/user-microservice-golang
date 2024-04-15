@@ -8,13 +8,13 @@ import (
 	"github.com/gustavovalle23/user-microservice-golang/pkg/user/domain"
 	"github.com/gustavovalle23/user-microservice-golang/pkg/user/usecases"
 	"github.com/stretchr/testify/assert"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func TestCreateUserUseCaseNewUserSuccess(t *testing.T) {
 	userRepo := database.NewInMemoryUserRepository()
 
 	input := usecases.CreateUserInput{
+		ID:         1,
 		Name:       "Tester Name",
 		Password:   "password",
 		Email:      "example@example.com",
@@ -31,8 +31,7 @@ func TestCreateUserUseCaseNewUserSuccess(t *testing.T) {
 	output, err := useCase.Execute(input)
 
 	assert.NoError(t, err)
-	assert.True(t, primitive.IsValidObjectID(output.UserID))
-
+	assert.NotEmpty(t, output)
 }
 
 func TestCreateUserUseCaseExistingUserError(t *testing.T) {

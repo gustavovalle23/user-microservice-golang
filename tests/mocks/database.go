@@ -28,7 +28,7 @@ func (m *MockUserRepository) FindByEmail(email string) (*domain.User, error) {
 	return user, args.Error(1)
 }
 
-func (m *MockUserRepository) FindByID(ID string) (*domain.User, error) {
+func (m *MockUserRepository) FindByID(ID int) (*domain.User, error) {
 	args := m.Called(ID)
 	user, _ := args.Get(0).(*domain.User)
 	return user, args.Error(1)
@@ -43,7 +43,7 @@ type MockTokenGenerator struct {
 	mock.Mock
 }
 
-func (m *MockTokenGenerator) GenerateToken(userID string, expirationTime time.Time) (string, error) {
+func (m *MockTokenGenerator) GenerateToken(userID int, expirationTime time.Time) (string, error) {
 	args := m.Called(userID, expirationTime)
 	return args.String(0), args.Error(1)
 }

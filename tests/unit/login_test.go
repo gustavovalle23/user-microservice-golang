@@ -10,7 +10,6 @@ import (
 	"github.com/gustavovalle23/user-microservice-golang/tests/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 const (
@@ -25,7 +24,7 @@ func TestLoginSuccessfulLoginReturnsToken(t *testing.T) {
 
 	mockUserRepository := new(mocks.MockUserRepository)
 	user := &domain.User{
-		ID:       primitive.NewObjectID(),
+		ID:       1,
 		Name:     name,
 		Password: password,
 		Email:    email,
@@ -34,7 +33,7 @@ func TestLoginSuccessfulLoginReturnsToken(t *testing.T) {
 
 	mockTokenGenerator := new(mocks.MockTokenGenerator)
 	expirationTime := time.Now().Add(time.Hour * 24)
-	mockTokenGenerator.On("GenerateToken", user.ID.Hex(), expirationTime).Return(expectedToken, nil)
+	mockTokenGenerator.On("GenerateToken", user.ID, expirationTime).Return(expectedToken, nil)
 
 	loginUseCase := usecases.NewLoginUseCase(mockUserRepository, mockTokenGenerator)
 
@@ -52,7 +51,7 @@ func TestLoginIncorrectPasswordReturnsError(t *testing.T) {
 
 	mockUserRepository := new(mocks.MockUserRepository)
 	user := &domain.User{
-		ID:       primitive.NewObjectID(),
+		ID:       1,
 		Name:     name,
 		Password: password,
 		Email:    email,
@@ -99,7 +98,7 @@ func TestLoginTokenGenerationFailsReturnsError(t *testing.T) {
 	mockUserRepository := new(mocks.MockUserRepository)
 
 	user := &domain.User{
-		ID:       primitive.NewObjectID(),
+		ID:       1,
 		Name:     name,
 		Password: password,
 		Email:    email,
@@ -107,7 +106,7 @@ func TestLoginTokenGenerationFailsReturnsError(t *testing.T) {
 	mockUserRepository.On("FindByEmail", email).Return(user, nil)
 
 	mockTokenGenerator := new(mocks.MockTokenGenerator)
-	mockTokenGenerator.On("GenerateToken", user.ID.Hex(), mock.Anything).Return("", errors.New("failed to generate token"))
+	mockTokenGenerator.On("GenerateToken", user.ID, mock.Anything).Return("", errors.New("failed to generate token"))
 
 	loginUseCase := usecases.NewLoginUseCase(mockUserRepository, mockTokenGenerator)
 

@@ -2,11 +2,10 @@ package usecases
 
 import (
 	"github.com/gustavovalle23/user-microservice-golang/pkg/user/domain"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type UpdateUserInput struct {
-	UserID    string
+	UserID    int
 	Name      string
 	Email     string
 	Address   domain.Address
@@ -14,7 +13,7 @@ type UpdateUserInput struct {
 }
 
 type UpdateUserOutput struct {
-	UserID     string
+	UserID     int
 	Name       string
 	Email      string
 	DocumentNo string
@@ -36,12 +35,7 @@ func (uc *UpdateUserUseCase) Execute(input UpdateUserInput) (UpdateUserOutput, e
 		return UpdateUserOutput{}, err
 	}
 
-	userID, err := primitive.ObjectIDFromHex(input.UserID)
-	if err != nil {
-		return UpdateUserOutput{}, err
-	}
-
-	updatedUser, err := domain.NewUser(&userID, input.Name, originalUser.Password, input.Email, originalUser.DocumentNo, input.Address, input.BirthDate)
+	updatedUser, err := domain.NewUser(input.UserID, input.Name, originalUser.Password, input.Email, originalUser.DocumentNo, input.Address, input.BirthDate)
 	if err != nil {
 		return UpdateUserOutput{}, err
 	}
@@ -52,7 +46,7 @@ func (uc *UpdateUserUseCase) Execute(input UpdateUserInput) (UpdateUserOutput, e
 	}
 
 	return UpdateUserOutput{
-			UserID:     updatedUser.ID.Hex(),
+			UserID:     updatedUser.ID,
 			Name:       updatedUser.Name,
 			Email:      updatedUser.Email,
 			DocumentNo: updatedUser.DocumentNo,

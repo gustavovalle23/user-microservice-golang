@@ -1,33 +1,28 @@
 package main
 
 import (
-	"fmt"
-	"os"
-	"strconv"
+	"net/http"
 
-	"github.com/joho/godotenv"
+	"github.com/gin-gonic/gin"
 )
 
-const defaultPort = 8080
+type User struct {
+	ID       int    `json:"id"`
+	Name     string `json:"name"`
+	IsActive bool   `json:"is_active"`
+	IsStaff  bool   `json:"is_staff"`
+}
 
 func main() {
-	err := godotenv.Load(".env")
-	if err != nil {
-		fmt.Println("Error:", err)
-		return
+	r := gin.Default()
+
+	users := []User{
+		{ID: 1, Name: "Gustavo Valle", IsActive: true, IsStaff: true},
 	}
 
-	portStr := os.Getenv("PORT")
-	if portStr == "" {
-		portStr = strconv.Itoa(defaultPort)
-	}
+	r.GET("/users/", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, users)
+	})
 
-	port, err := strconv.Atoi(portStr)
-	if err != nil {
-		fmt.Println("Error: Invalid PORT value")
-		return
-	}
-
-	fmt.Println(port)
-
+	r.Run("localhost:8000")
 }
