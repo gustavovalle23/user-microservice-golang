@@ -13,13 +13,15 @@ type Address struct {
 }
 
 type User struct {
-	ID                  int
-	Name                string
+	ID                  int    `json:"id"`
+	Name                string `json:"name"`
 	BirthDate           Date
 	Password            string
 	Email               string
 	DocumentNo          string
 	Address             Address
+	IsActive            bool `json:"is_active"`
+	IsStaff             bool `json:"is_staff"`
 	CreatedAt           time.Time
 	UpdatedAt           time.Time
 	DeletedAt           *time.Time

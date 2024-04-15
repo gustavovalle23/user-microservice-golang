@@ -1,26 +1,49 @@
 package main
 
 import (
+	"database/sql"
+	"fmt"
+	"log"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gustavovalle23/user-microservice-golang/pkg/user/database"
+	"github.com/joho/godotenv"
+	_ "github.com/lib/pq"
 )
 
-type User struct {
-	ID       int    `json:"id"`
-	Name     string `json:"name"`
-	IsActive bool   `json:"is_active"`
-	IsStaff  bool   `json:"is_staff"`
-}
-
 func main() {
-	r := gin.Default()
-
-	users := []User{
-		{ID: 1, Name: "Gustavo Valle", IsActive: true, IsStaff: true},
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
 	}
 
-	r.GET("/users/", func(ctx *gin.Context) {
+	dbUser := os.Getenv("DB_USER")
+	dbPassword := os.Getenv("DB_PASSWORD")
+	dbHost := os.Getenv("DB_HOST")
+	dbName := os.Getenv("DB_NAME")
+	dbSSLMode := os.Getenv("DB_SSL_MODE")
+
+	dbInfo := fmt.Sprintf("user=%s password=%s host=%s dbname=%s sslmode=%s",
+		dbUser, dbPassword, dbHost, dbName, dbSSLMode)
+
+	db, err := sql.Open("postgres", dbInfo)
+	if err != nil {
+		panic("Failed to connect to database")
+	}
+	defer db.Close()
+
+	r := gin.Default()
+
+	userRepo := database.UserRepository{DB: db}
+
+	r.GET("/users", func(ctx *gin.Context) {
+		users, err := userRepo.GetUsers()
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
 		ctx.JSON(http.StatusOK, users)
 	})
 
