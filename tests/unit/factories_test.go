@@ -4,10 +4,9 @@ import (
 	"testing"
 	"time"
 
+	"github.com/gustavovalle23/user-microservice-golang/pkg/user/domain"
 	"github.com/stretchr/testify/assert"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-
-	"github.com/gustavovalle23/user-microservice-golang/pkg/user/domain"
 )
 
 func TestNewUser(t *testing.T) {
