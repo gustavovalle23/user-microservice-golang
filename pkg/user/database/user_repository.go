@@ -10,17 +10,17 @@ type UserRepository struct {
 	DB *sql.DB
 }
 
-func (ur *UserRepository) GetUsers() ([]domain.User, error) {
+func (ur *UserRepository) GetUsers() ([]domain.UserOutput, error) {
 	rows, err := ur.DB.Query("SELECT id, name, is_active, is_staff FROM users")
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
-	var users []domain.User
+	var users []domain.UserOutput
 
 	for rows.Next() {
-		var user domain.User
+		var user domain.UserOutput
 		err := rows.Scan(&user.ID, &user.Name, &user.IsActive, &user.IsStaff)
 		if err != nil {
 			return nil, err
